@@ -27,7 +27,7 @@ from sklearn.cross_validation import KFold
 from sklearn.cross_validation import StratifiedKFold
 import pickle
 
-# define some run parameters
+# size1 channel number size2 scale number
 size1 = 32
 size2 = 32
 
