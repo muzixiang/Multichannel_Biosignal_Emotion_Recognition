@@ -1,1 +1,3 @@
 # Multichannel_Biosignal_Emotion_Recognition
+
+A modified and extended journal work "Deep Fusion of Multi-channel Neurophysiological Signal for Emotion Recognition and Monitoring" will be online soon...
