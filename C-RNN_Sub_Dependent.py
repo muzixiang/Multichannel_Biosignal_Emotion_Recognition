@@ -1,8 +1,3 @@
-'''
-Basic demonstration of the capabilities of the CRNN using TimeDistributed layers
-Processes an MNIST image (or blank square) at each time step and sums the digits.
-Learning is based on the sum of the digits, not explicit labels on each digit.
-'''
 
 from __future__ import print_function
 import numpy as np
@@ -54,18 +49,15 @@ exNum = 250
 time_distributed_merge_layer = Lambda(function=lambda x: K.mean(x, axis=1),
                                       output_shape=lambda shape: (shape[0],) + shape[2:])
 
-for subNo in range(21,22):
-    # file = h5py.File('D:\\LX\\RCNNXY\\sigseg_cwt\\nooverlap\\1s_div_Fs_as_element\\max'+str(maxToAdd)+'_eqL\\sub1.mat', 'r')
-    # file = h5py.File('D:\\RCNNXY\\sigseg_cwt\\nooverlap\\1s_as_element\\max'+str(maxToAdd)+'_eqL\\sub1.mat', 'r')
-    # file = h5py.File('D:\\LX\\RCNNXY\\trial_cwt\\nooverlap\\1s_div_Fs_as_element\\max'+str(maxToAdd)+'_eqL\\sub'+str(subNo+1)+'.mat', 'r')
-    file = h5py.File('D:\\LX\\RCNNXY\\trial_cwt\\nooverlap\\'+str(window)+'s_as_element\\sub'+str(subNo+1)+'.mat', 'r')
+for subNo in range(1,32):
+    file = h5py.File('D:\\LX\\CRNNXY\\trial_cwt\\nooverlap\\'+str(window)+'s_as_element\\sub'+str(subNo+1)+'.mat', 'r')
     X = file['X']
     Y = file['Y_personal']
     Y40 = file['Y_40personal']
     X = np.transpose(X)
     Y = np.transpose(Y)[:, emodim]
     Y40 = np.transpose(Y40)[:, emodim]
-    X = X[:,:,:,:,6:38]
+    X = X[:,:,:,:,6:38] #inut frame, scale selection
     print('X shape:', X.shape)
     print('Y shape:', Y.shape)
     print('Y40 shape:', Y40.shape)
@@ -108,7 +100,6 @@ for subNo in range(21,22):
         model.add(TimeDistributed(AveragePooling2D(pool_size=(1, 2), border_mode='valid')))
         model.add(TimeDistributed(Flatten()))
         model.add(LSTM(output_dim=128, return_sequences=True))
-        #model.add(LSTM(output_dim=64, return_sequences=False))
         model.add(Dropout(0.5))
         model.add(TimeDistributed(Dense(256)))
         model.add(Dropout(0.5))
@@ -122,7 +113,7 @@ for subNo in range(21,22):
         adagrad = Adagrad()
 
         model.compile(loss='binary_crossentropy', optimizer=rmsprop, metrics=['accuracy'])
-        # model.summary()
+        model.summary()
         model.fit(X_train, Y_train, batch_size=batch_size, nb_epoch=nb_epochs, validation_data=(X_test, Y_test), verbose=1)
 
         foldNo=foldNo+1
