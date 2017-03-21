@@ -92,6 +92,7 @@ for subNo in range(1,32):
         Y_train = np_utils.to_categorical(Y_train, 2)
         Y_test = np_utils.to_categorical(Y_test, 2)
         model = Sequential()
+        # input shape variates with different frame shapes, 2D or 3D
         model.add(TimeDistributed(Convolution2D(8, 32, 1, border_mode='valid'), input_shape=(maxToAdd, 1, size1, size2)))
         model.add(Activation('relu'))
         model.add(TimeDistributed(AveragePooling2D(pool_size=(1, 2), border_mode='valid')))
